@@ -20,17 +20,20 @@ train = optimizer.minimize(loss)
 # Before starting, initialize the variables.  We will 'run' this first.
 init = tf.global_variables_initializer()
 
+# Add ops to save and restore all the variables.
+saver = tf.train.Saver()
+
 # Launch the graph.
-sess = tf.Session()
-sess.run(init)
+with tf.Session() as sess:
+    sess.run(init)
 
-# Fit the line.
-for step in range(201):
-    sess.run(train)
-    if step % 20 == 0:
-        print(step, sess.run(W), sess.run(b))
+    # Fit the line.
+    for step in range(201):
+        sess.run(train)
+        if step % 20 == 0:
+            print(step, sess.run(W), sess.run(b))
 
-# Learns best fit is W: [0.1], b: [0.3]
+    # Learns best fit is W: [0.1], b: [0.3]
 
-# Close the Session when we're done.
-sess.close()
+    # Export saved model file
+    save_path = saver.save(sess, "saved_model/sample.ckpt")
